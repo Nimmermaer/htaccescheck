@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check</title>
+</head>
+<body>
+
+<form action="addPath" method="post">
+    <label id="path">
+        <input name="arguments[path]"/>
+    </label>
+    <button>
+        Submit
+    </button>
+</form>
+<ol>
+    {% for path in paths %}
+    <li>{{ path }}</li>
+    {% endfor %}
+</ol>
+</body>
+</html>
