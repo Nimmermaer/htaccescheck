@@ -4,11 +4,15 @@
     "type": "project",
     "version": "1.0.0",
     "require": {
-        "../../vendor/twig/twig": "^3.4"
+        "twig/twig": "^3.4"
     },
     "require-dev": {
-        "../../vendor/rector/rector": "^0.14.7"
+        "rector/rector": "^0.14.7",
+        "kint-php/kint": "^4.2"
     },
+    "bin": [
+        "bin/check"
+    ],
     "license": "MIT",
     "autoload": {
         "psr-4": {

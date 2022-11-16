@@ -1,0 +1,5 @@
+#!/usr/bin/env php
+<?php
+namespace Iwmedien;
+
+require_once __DIR__ . '/../src/Scripts/CheckCommand.php';
