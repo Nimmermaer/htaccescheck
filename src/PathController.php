@@ -4,37 +4,41 @@ namespace Iwmedien\Htaccescheck;
 
 use Iwmedien\Htaccescheck\Utilities\RemoveDuplicates;
 
-class PathController
+class PathController extends ActionController
 {
-    /**
-     * @var string
-     */
-    final public const DIRECTORY = '../var/iwmedien/';
+
+    public function __construct(public string $directory = '', public string $varFolder = '')
+    {
+        $this->varFolder = dirname(__DIR__, 3) . '/var/';
+        $this->directory = dirname(__DIR__, 3) . '/var/iwmedien/';
+        parent::__construct();
+    }
+
 
     /**
      * @var string
      */
-    final public const FILE = 'paths.csv';
-    
+    public const FILE = 'paths.csv';
+
     /**
      * @var string
      */
-    final public const SAVE = 'save';
-    
+    public const SAVE = 'save';
+
     /**
      * @var string
      */
-    final const FAIL = 'fail';
-    
+    public const FAIL = 'fail';
+
     /**
      * @var string
      */
-    final const DUPLICATE = 'duplicate';
+    const DUPLICATE = 'duplicate';
 
     /**
      * @var array<string, string>
      */
-    final public const MESSAGE = [
+    public const MESSAGE = [
         self::SAVE => 'url gespeichert',
         self::FAIL => 'url nicht korrekt',
         self::DUPLICATE => 'url bereits vorhanden'
@@ -42,16 +46,18 @@ class PathController
 
 
 
+
     public function addPath($arguments): void
     {
         self::configureFolder();
-        if (self::checkUrl($arguments) === 'save') {
-            $fp = fopen(self::DIRECTORY . self::FILE, 'a+');
+        $response = self::checkUrl($arguments);
+        if ($response === 'save') {
+            $fp = fopen($this->directory . self::FILE, 'a+');
             fputcsv($fp, $arguments, ';');
             fclose($fp);
         }
 
-        echo self::MESSAGE[self::checkUrl($arguments)];
+        echo self::MESSAGE[$response];
     }
 
     /**
@@ -61,28 +67,31 @@ class PathController
     {
         self::configureFolder();
         $paths = [];
-        $fp = fopen(self::DIRECTORY . self::FILE, 'r');
+        $fp = fopen($this->directory . self::FILE, 'r');
         while (($line = fgetcsv($fp)) !== false) {
             $paths[] = $line[0];
         }
-        
+
         return $paths ?? [];
     }
 
-    public function removePath(): void
-    {
 
+    public function removePath($arguments): void
+    {
     }
 
-    private static function configureFolder(): void
+    private function configureFolder(): void
     {
 
-        if (!is_dir(self::DIRECTORY)) {
-            mkdir(self::DIRECTORY);
+        if (!is_dir($this->varFolder)) {
+            mkdir($this->varFolder);
+        }
+        if (!is_dir($this->directory)) {
+            mkdir($this->directory);
         }
 
-        if (!file_exists(self::DIRECTORY . self::FILE)) {
-            ($pathsFile = fopen(self::DIRECTORY . self::FILE, "w+")) || die("Unable to open file!");
+        if (!file_exists($this->directory . self::FILE)) {
+            ($pathsFile = fopen($this->directory . self::FILE, "w+")) || die("Unable to open file!");
             fclose($pathsFile);
         }
     }
@@ -100,11 +109,16 @@ class PathController
         if (!filter_var($arguments['path'], FILTER_VALIDATE_URL)) {
             $value = self::FAIL;
         }
-        
+
         if ($this->urlExists($arguments['path'])) {
             $value = self::DUPLICATE;
         }
 
         return $value;
+    }
+
+    public function getPathToCSVFile()
+    {
+        return $this->directory . self::FILE;
     }
 }

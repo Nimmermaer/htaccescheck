@@ -3,6 +3,8 @@ declare (strict_types=1);
 
 namespace Iwmedien;
 
+use Iwmedien\Htaccescheck\PathController;
+
 if (php_sapi_name() !== 'cli') {
     exit;
 }
@@ -19,8 +21,31 @@ $command->run();
 
 final class CheckCommand
 {
-    public function run()
+    public const HTTP_OK = "HTTP/1.1 200 OK";
+    public const HTTP_UNAUTHORIZED = "HTTP/1.1 401 Unauthorized";
+
+    public function run(): void
     {
-        echo 'Hello World';
+        $file = fopen((new PathController())->getPathToCSVFile(), 'r');
+        $context = stream_context_create(['http' => ['ignore_errors' => true]]);
+        while (($line = fgetcsv($file)) !== false) {
+
+            if (filter_var($line[0], FILTER_VALIDATE_URL)) {
+                $response = file_get_contents((string)$line[0], false, $context);
+                if ($http_response_header[0] !== self::HTTP_UNAUTHORIZED) {
+                    $message = <<<MESSAGE
+ Bitte Htaccess bei {$line[0]} wieder einsetzen
+MESSAGE;
+
+                    mail(
+                        'programmierung@iwkoeln.de',
+                        $line[0] . ' ist ohne htaccess Schutz',
+                        $message,
+                        'From: Htaccesscheck <programmierung@iwkoeln.de> \n '
+                    );
+                }
+            }
+        }
+        fclose($file);
     }
 }

@@ -1,29 +1,31 @@
 {
-    "name": "iwmedien/htaccescheck",
-    "description": "Check locked htaccess",
-    "type": "project",
-    "version": "1.0.0",
-    "require": {
-        "twig/twig": "^3.4"
-    },
-    "require-dev": {
-        "rector/rector": "^0.14.7",
-        "kint-php/kint": "^4.2"
-    },
-    "bin": [
-        "bin/check"
-    ],
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Iwmedien\\Htaccescheck\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Michael Blunck",
-            "email": "blunck@iwkoeln.de"
-        }
-    ],
-    "minimum-stability": "stable"
+  "name": "iwmedien/htaccescheck",
+  "description": "Check locked htaccess",
+  "type": "project",
+  "version": "1.0.0",
+  "require": {
+    "php": "8.1.*",
+    "twig/twig": "^3.4",
+    "symfony/mime": "^6.1"
+  },
+  "require-dev": {
+    "rector/rector": "^0.14.7",
+    "kint-php/kint": "^4.2"
+  },
+  "bin": [
+    "bin/check"
+  ],
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Iwmedien\\Htaccescheck\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Michael Blunck",
+      "email": "blunck@iwkoeln.de"
+    }
+  ],
+  "minimum-stability": "stable"
 }

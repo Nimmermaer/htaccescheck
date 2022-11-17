@@ -38,10 +38,10 @@ class Routing
         // Get current request method
         $method = $server['REQUEST_METHOD'];
 
-
         $path_match_found = false;
 
         $route_match_found = false;
+
         foreach (self::$routes as $route) {
 
             $route['expression'] = '(' . $path . ')';
@@ -55,7 +55,6 @@ class Routing
             if (preg_match('#' . $route['expression'] . '#', $path, $matches)) {
 
                 $path_match_found = true;
-
                 // Check method match
                 if (strtolower((string)$method) === strtolower((string)$route['method'])) {
 

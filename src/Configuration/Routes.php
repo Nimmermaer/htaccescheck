@@ -16,4 +16,11 @@ $GLOBALS['ROUTES'] = [
         },
         'method' => 'post'
     ],
+    [
+        'expression' => '/removePath',
+        'function' => static function (string $call, array $arguments) {
+            (new \Iwmedien\Htaccescheck\PathController())->removePath($arguments);
+        },
+        'method' => 'get'
+    ],
 ];
