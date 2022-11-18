@@ -15,7 +15,7 @@
   "bin": [
     "bin/check"
   ],
-  "license": "MIT",
+  "license": "GPL-2.0+",
   "autoload": {
     "psr-4": {
       "Iwmedien\\Htaccescheck\\": "src/"
