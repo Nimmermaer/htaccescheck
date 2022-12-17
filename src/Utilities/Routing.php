@@ -14,16 +14,16 @@ class Routing
 
     public function __construct()
     {
-        include_once __DIR__ . '/Configuration/Routes.php';
+        include_once __DIR__ . '/../Configuration/Routes.php';
         $this::$routes = $GLOBALS['ROUTES'];
     }
 
-    public static function pathNotFound($function): void
+    public static function pathNotFound(string $function): void
     {
         self::$pathNotFound = $function;
     }
 
-    public static function methodNotAllowed($function): void
+    public static function methodNotAllowed(string $function): void
     {
         self::$methodNotAllowed = $function;
     }
@@ -77,12 +77,18 @@ class Routing
             // But a matching path exists
             if ($path_match_found) {
                 header("HTTP/1.0 405 Method Not Allowed");
-                if (self::$methodNotAllowed) {
-                    call_user_func_array(self::$methodNotAllowed, [$path, $method]);
+                if (self::$methodNotAllowed === '') {
+                    return;
                 }
+                
+                if (self::$methodNotAllowed === '0') {
+                    return;
+                }
+                
+                call_user_func_array(self::$methodNotAllowed, [$path, $method]);
             } else {
                 header("HTTP/1.0 404 Not Found");
-                if (self::$pathNotFound) {
+                if (self::$pathNotFound !== '' && self::$pathNotFound !== '0') {
                     call_user_func_array(self::$pathNotFound, [$path]);
                 }
             }

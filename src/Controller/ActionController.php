@@ -60,7 +60,7 @@ class ActionController
 
     protected function initFrontend(): void
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../resources/templates');
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../resources/templates');
         $this->view = new \Twig\Environment($loader, [
             'debug' => true,
             'cache' => '../var/cache',
@@ -100,11 +100,16 @@ class ActionController
     {
         $messages = [];
         $file = fopen((new PathController())->getPathToCSVFile(), 'r');
+        $context = stream_context_create(['http' => ['ignore_errors' => true]]);
         while (($line = fgetcsv($file)) !== false) {
 
-            if (filter_var($line[0], FILTER_VALIDATE_URL) && $http_response_header[0] !== self::HTTP_UNAUTHORIZED) {
-                $message = sprintf(' Bitte Htaccess bei %s wieder einsetzen', $line[0]);
-                $messages[] = $message;
+            if (filter_var($line[0], FILTER_VALIDATE_URL)) {
+                file_get_contents((string)$line[0], false, $context);
+                if ($http_response_header[0] !== self::HTTP_UNAUTHORIZED) {
+                    $message = sprintf(' Bitte Htaccess bei %s wieder einsetzen', $line[0]);
+
+                    $messages[] = $message;
+                }
             }
         }
         

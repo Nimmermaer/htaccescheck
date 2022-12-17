@@ -9,8 +9,8 @@ class PathController extends ActionController
 
     public function __construct(public string $directory = '', public string $varFolder = '')
     {
-        $this->varFolder = dirname(__DIR__, 3) . '/var/';
-        $this->directory = dirname(__DIR__, 3) . '/var/iwmedien/';
+        $this->varFolder = dirname(__DIR__, 4) . '/var/';
+        $this->directory = dirname(__DIR__, 4) . '/var/iwmedien/';
         parent::__construct();
     }
 
