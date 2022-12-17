@@ -1,7 +1,8 @@
 <?php
 
-namespace Iwmedien\Htaccescheck;
+namespace Iwmedien\Htaccescheck\Controller;
 
+use Iwmedien\Htaccescheck\Utilities\Routing;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -10,8 +11,16 @@ use function Composer\Autoload\includeFile;
 
 class ActionController
 {
+    /**
+     * @var string
+     */
     public const HTTP_OK = "HTTP/1.1 200 OK";
+    
+    /**
+     * @var string
+     */
     public const HTTP_UNAUTHORIZED = "HTTP/1.1 401 Unauthorized";
+    
     protected Environment $view;
 
     protected Routing $route;
@@ -26,7 +35,7 @@ class ActionController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    private function dashboard()
+    private function dashboard(): void
     {
         $this->checkHtaccessPath();
         $this->initFrontend();
@@ -39,7 +48,7 @@ class ActionController
      * @throws SyntaxError
      * @throws LoaderError
      */
-    private function index()
+    private function index(): void
     {
         $arguments = $_REQUEST['arguments'] ?? [];
         $this->checkHtaccessPath();
@@ -91,20 +100,14 @@ class ActionController
     {
         $messages = [];
         $file = fopen((new PathController())->getPathToCSVFile(), 'r');
-        $context = stream_context_create(['http' => ['ignore_errors' => true]]);
         while (($line = fgetcsv($file)) !== false) {
 
-            if (filter_var($line[0], FILTER_VALIDATE_URL)) {
-                $response = file_get_contents((string)$line[0], false, $context);
-                if ($http_response_header[0] !== self::HTTP_UNAUTHORIZED) {
-                    $message = <<<MESSAGE
- Bitte Htaccess bei {$line[0]} wieder einsetzen
-MESSAGE;
-
-                    $messages[] = $message;
-                }
+            if (filter_var($line[0], FILTER_VALIDATE_URL) && $http_response_header[0] !== self::HTTP_UNAUTHORIZED) {
+                $message = sprintf(' Bitte Htaccess bei %s wieder einsetzen', $line[0]);
+                $messages[] = $message;
             }
         }
+        
         fclose($file);
         return $messages;
     }

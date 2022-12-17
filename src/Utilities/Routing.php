@@ -1,6 +1,6 @@
 <?php
 
-namespace Iwmedien\Htaccescheck;
+namespace Iwmedien\Htaccescheck\Utilities;
 
 
 class Routing
@@ -8,9 +8,9 @@ class Routing
 
     private static array $routes;
 
-    private static $pathNotFound = null;
+    private static string $pathNotFound;
 
-    private static $methodNotAllowed = null;
+    private static string $methodNotAllowed;
 
     public function __construct()
     {

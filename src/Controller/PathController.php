@@ -1,6 +1,6 @@
 <?php
 
-namespace Iwmedien\Htaccescheck;
+namespace Iwmedien\Htaccescheck\Controller;
 
 use Iwmedien\Htaccescheck\Utilities\RemoveDuplicates;
 
@@ -18,27 +18,27 @@ class PathController extends ActionController
     /**
      * @var string
      */
-    public const FILE = 'paths.csv';
+    final public const FILE = 'paths.csv';
 
     /**
      * @var string
      */
-    public const SAVE = 'save';
+    final public const SAVE = 'save';
 
     /**
      * @var string
      */
-    public const FAIL = 'fail';
+    final public const FAIL = 'fail';
 
     /**
      * @var string
      */
-    const DUPLICATE = 'duplicate';
+    final const DUPLICATE = 'duplicate';
 
     /**
      * @var array<string, string>
      */
-    public const MESSAGE = [
+    final public const MESSAGE = [
         self::SAVE => 'url gespeichert',
         self::FAIL => 'url nicht korrekt',
         self::DUPLICATE => 'url bereits vorhanden'
@@ -86,6 +86,7 @@ class PathController extends ActionController
         if (!is_dir($this->varFolder)) {
             mkdir($this->varFolder);
         }
+        
         if (!is_dir($this->directory)) {
             mkdir($this->directory);
         }
@@ -111,7 +112,7 @@ class PathController extends ActionController
         }
 
         if ($this->urlExists($arguments['path'])) {
-            $value = self::DUPLICATE;
+            return self::DUPLICATE;
         }
 
         return $value;
