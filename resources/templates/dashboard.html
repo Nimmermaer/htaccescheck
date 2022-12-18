@@ -3,14 +3,21 @@
 <head>
     <title>Ausgabe</title>
     <meta http-equiv="refresh" content="5">
+    {{ include('partials/style.html') }}
 </head>
 <body>
-<a href="index">Eingabe</a>
+<div class="container">
+    {% include 'partials/navbar.html' with {value:'dashboard'}%}
+    <div class="row">
+        <div class="card">
+            <ol>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
 
-<ol>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ol>
 </body>
 </html>

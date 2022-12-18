@@ -2,22 +2,35 @@
 <html>
 <head>
     <title>Check</title>
+    <meta charset="UTF-8">
+    {{ include('partials/style.html') }}
+</head>
+
 </head>
 <body>
-<a href="dashboard">Dashboard</a>
+<div class="container">
+    {% include 'partials/navbar.html' with {value:'index'}%}
+    <div class="row">
+        <div class="col">
+            <form action="addPath" method="post">
+                <p class="grouped">
+                    <input type="text" name="arguments[path]"/>
+                    <button>
+                        Submit
+                    </button>
+                </p>
 
-<form action="addPath" method="post">
-    <label id="path">
-        <input name="arguments[path]"/>
-    </label>
-    <button>
-        Submit
-    </button>
-</form>
-<ol>
-    {% for path in paths %}
-    <li>{{ path }}</li>
-    {% endfor %}
-</ol>
+            </form>
+            <div class="card">
+                <ol>
+                    {% for path in paths %}
+                    <li>{{ path }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

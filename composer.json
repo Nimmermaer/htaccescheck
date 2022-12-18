@@ -9,7 +9,7 @@
     "symfony/mime": "^6.1"
   },
   "require-dev": {
-    "rector/rector": "^0.14.7",
+    "rector/rector": "^0.15.1",
     "kint-php/kint": "^4.2"
   },
   "bin": [

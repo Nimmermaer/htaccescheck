@@ -7,7 +7,6 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use function Composer\Autoload\includeFile;
 
 class ActionController
 {
@@ -40,7 +39,7 @@ class ActionController
         $this->checkHtaccessPath();
         $this->initFrontend();
         $paths = (new PathController())->getPaths();
-        $this->view->display('dashboard.html', ['paths' => $paths, 'messages' => $this->checkFeedback()]);
+        $this->view->display('templates/dashboard.html', ['paths' => $paths, 'messages' => $this->checkFeedback()]);
     }
 
     /**
@@ -55,12 +54,12 @@ class ActionController
         $this->routing($_SERVER, $arguments);
         $this->initFrontend();
         $paths = (new PathController())->getPaths();
-        $this->view->display('index.html', ['paths' => $paths]);
+        $this->view->display('templates/index.html', ['paths' => $paths]);
     }
 
     protected function initFrontend(): void
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../resources/templates');
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../resources/');
         $this->view = new \Twig\Environment($loader, [
             'debug' => true,
             'cache' => '../var/cache',
@@ -69,17 +68,18 @@ class ActionController
     }
 
 
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
+
     public function run(): void
     {
-        match ($_SERVER['REQUEST_URI']) {
-            '/dashboard' => self::dashboard(),
-            default => self::index()
-        };
+        try {
+            match (ltrim ($_SERVER['REQUEST_URI'], '/')) {
+                'dashboard' => self::dashboard(),
+                 default => self::index()
+            };
+        } catch (\Exception $exception) {
+            throw new \Exception('Looks like something go wrong: ' . $exception->getMessage());
+        }
+
     }
 
     protected function checkHtaccessPath(): void

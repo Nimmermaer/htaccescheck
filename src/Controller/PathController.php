@@ -39,9 +39,9 @@ class PathController extends ActionController
      * @var array<string, string>
      */
     final public const MESSAGE = [
-        self::SAVE => 'url gespeichert',
-        self::FAIL => 'url nicht korrekt',
-        self::DUPLICATE => 'url bereits vorhanden'
+        self::SAVE => '<span class="text-success">url gespeichert</span>',
+        self::FAIL => '<span class="text-error">url nicht korrekt</span>',
+        self::DUPLICATE => '<span class="bd-grey">url bereits vorhanden</span>'
     ];
 
 
@@ -57,7 +57,7 @@ class PathController extends ActionController
             fclose($fp);
         }
 
-        echo self::MESSAGE[$response];
+        echo '<div class="container"><div class="row">' . self::MESSAGE[$response] . '</div></div>';
     }
 
     /**
